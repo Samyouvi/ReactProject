@@ -3,29 +3,12 @@ import ReactPlayer from 'react-player'
 
 class Video extends Component {
 
-/*  state = {
+  state = {
     url: 'https://ia801406.us.archive.org/32/items/Route_66_-_an_American_badDream/Route_66_-_an_American_badDream_512kb.mp4',
     playing: false,
     controls: true,
     volume: 0.8,
     played: 0,
-  }
-
-  componentDidMount(){
-    fetch("https://imr3-react.herokuapp.com/backend")
-    .then(res => res.json())
-    .then(result => {
-      this.setState({
-        items: result
-      })
-    })
-  }
-
-  load = url => {
-    this.setState({
-      url,
-      played: 0,
-    })
   }
 
   handleVolumeChange = e => {
@@ -63,7 +46,7 @@ class Video extends Component {
   }
 
   render () {
-    const { url, playing, controls, volume, played } = this.state
+    const { url, playing, controls, volume } = this.state
 
     return (
       <div className='app'>
@@ -80,30 +63,13 @@ class Video extends Component {
               volume={volume}
             />
           </div>
-
           <table>
             <tbody>
-              <tr>
-                <th>Seek</th>
-                <td>
-                  <input
-                    type='range' min={0} max={1} step='any'
-                    value={played}
-                    onMouseDown={this.handleSeekMouseDown}
-                    onChange={this.handleSeekChange}
-                    onMouseUp={this.handleSeekMouseUp}
-                  />
-                </td>
-              </tr>
               <tr>
                 <th>Volume</th>
                 <td>
                   <input type='range' min={0} max={1} step='any' value={volume} onChange={this.handleVolumeChange} />
                 </td>
-              </tr>
-              <tr>
-                <th>Played</th>
-                <td><progress max={1} value={played} /></td>
               </tr>
             </tbody>
           </table>
@@ -111,7 +77,7 @@ class Video extends Component {
       </div>
     )
   }
-}*/
+}
 
 export default Video;
 
