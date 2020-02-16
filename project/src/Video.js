@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import ReactPlayer from 'react-player'
 import Chapters from './Chapters';
-import Map from './Map';
-import KeyWords from './KeyWords';
-import { Container, Tabs, Tab } from 'react-bootstrap';
+import Waypoints from './Waypoints';
+import Keywords from './Keywords';
+import { Container, Col, Tabs, Tab } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 class Video extends Component {
@@ -80,21 +80,23 @@ class Video extends Component {
               />
             </div>
             <h3> {items.Film.title} </h3>
-            <Tabs defaultActiveKey="controls">
-              <Tab eventKey="controls" title="Controls">
-                <p>Volume</p>
-                <input type='range' min={0} max={1} step='any' value={volume} onChange={this.handleVolumeChange} />
-              </Tab>
-              <Tab eventKey="chapters" title="Chapters">
-                <Chapters items={items.Chapters} handleClick={this.handleSeek} />
-              </Tab>
-              <Tab eventKey="map" title="Map">
-                <Map items={items.Waypoints} />
-              </Tab>
-              <Tab eventKey="keywords" title="KeyWords">
-                <KeyWords items={items.Keywords} handleClick={this.handleSeek} />
-              </Tab>
-            </Tabs>
+            <Col sm={12} md={12} lg={12}>
+              <Tabs defaultActiveKey="controls">
+                <Tab eventKey="controls" title="Controls">
+                  <p>Volume</p>
+                  <input type='range' min={0} max={1} step='any' value={volume} onChange={this.handleVolumeChange} />
+                </Tab>
+                <Tab eventKey="chapters" title="Chapters">
+                  <Chapters items={items.Chapters} handleClick={this.handleSeek} />
+                </Tab>
+                <Tab eventKey="map" title="Map">
+                  <Waypoints items={items.Waypoints} />
+                </Tab>
+                <Tab eventKey="keywords" title="KeyWords">
+                  <Keywords items={items.Keywords} handleClick={this.handleSeek} />
+                </Tab>
+              </Tabs>
+            </Col>
         </Container>
       )
     }else{
