@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { Button } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class ChatMessage extends Component {
   static propTypes = {
@@ -25,7 +27,7 @@ class ChatMessage extends Component {
           value={this.state.message}
           onChange={e => this.setState({ message: e.target.value })}
         />
-        <input type="submit" value={'Send'} />
+        <Button variant="primary" type="submit"> Send </Button>
       </form>
     )
   }

@@ -1,14 +1,37 @@
 import React, { Component } from 'react'
 import ReactPlayer from 'react-player'
+import Chapters from './Chapters';
+import Map from './Map';
+import KeyWords from './KeyWords';
+import { Container, Tabs, Tab } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class Video extends Component {
 
-  state = {
-    url: 'https://ia801406.us.archive.org/32/items/Route_66_-_an_American_badDream/Route_66_-_an_American_badDream_512kb.mp4',
-    playing: false,
-    controls: true,
-    volume: 0.8,
-    played: 0,
+  constructor(props){
+    super(props)
+    this.state = {
+      url: null,
+      playing: false,
+      controls: true,
+      volume: 0.8,
+      data_loaded: false,
+      items: [],
+      seconds: 0.0,
+      played: 0,
+    }
+  }
+  
+
+  componentDidMount(){
+    fetch("https://imr3-react.herokuapp.com/backend")
+    .then(res => res.json())
+    .then(result => {
+      this.setState({
+        data_loaded: true,
+        items: result
+      })
+    })
   }
 
   handleVolumeChange = e => {
@@ -20,19 +43,6 @@ class Video extends Component {
     this.setState({ playing: true })
   }
 
-  handleSeekMouseDown = e => {
-    this.setState({ seeking: true })
-  }
-
-  handleSeekChange = e => {
-    this.setState({ played: parseFloat(e.target.value) })
-  }
-
-  handleSeekMouseUp = e => {
-    this.setState({ seeking: false })
-    this.player.seekTo(parseFloat(e.target.value))
-  }
-
   handleProgress = state => {
     console.log('onProgress', state)
     // We only want to update time slider if we are not currently seeking
@@ -41,41 +51,59 @@ class Video extends Component {
     }
   }
 
+  handleSeek = seconds => {
+    if(this.player){
+      this.player.seekTo(parseFloat(seconds))
+    }
+  }
+
   ref = player => {
     this.player = player
   }
 
   render () {
-    const { url, playing, controls, volume } = this.state
+    const { data_loaded, playing, controls, volume, items } = this.state
 
-    return (
-      <div className='app'>
-        <section className='section'>
-          <div className='player-wrapper'>
-            <ReactPlayer
-              ref={this.ref}
-              className='react-player'
-              width='50%'
-              height='50%'
-              url={url}
-              playing={playing}
-              controls={controls}
-              volume={volume}
-            />
-          </div>
-          <table>
-            <tbody>
-              <tr>
-                <th>Volume</th>
-                <td>
-                  <input type='range' min={0} max={1} step='any' value={volume} onChange={this.handleVolumeChange} />
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </section>
-      </div>
-    )
+    if(data_loaded){
+      return (
+        <Container>
+            <div className='player-wrapper'>
+              <ReactPlayer
+                ref={this.ref}
+                className='react-player'
+                width='100%'
+                height='50%'
+                url={items.Film.file_url}
+                playing={playing}
+                controls={controls}
+                volume={volume}
+              />
+            </div>
+            <h3> {items.Film.title} </h3>
+            <Tabs defaultActiveKey="controls">
+              <Tab eventKey="controls" title="Controls">
+                <p>Volume</p>
+                <input type='range' min={0} max={1} step='any' value={volume} onChange={this.handleVolumeChange} />
+              </Tab>
+              <Tab eventKey="chapters" title="Chapters">
+                <Chapters items={items.Chapters} handleClick={this.handleSeek} />
+              </Tab>
+              <Tab eventKey="map" title="Map">
+                <Map items={items.Waypoints} />
+              </Tab>
+              <Tab eventKey="keywords" title="KeyWords">
+                <KeyWords items={items.Keywords} handleClick={this.handleSeek} />
+              </Tab>
+            </Tabs>
+        </Container>
+      )
+    }else{
+      return(
+      <Container>
+        <p> Data Loading... </p>
+      </Container>
+      )
+    }
   }
 }
 
