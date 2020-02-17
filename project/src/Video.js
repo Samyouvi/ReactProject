@@ -57,6 +57,12 @@ class Video extends Component {
     }
   }
 
+  onSelect() {
+    /* Pour régler le conflit de css entre bootstrap et leaflet quand on change de tab
+       On envoie un événement de type resize pour forcer la map à recalculer sa taille */
+    window.dispatchEvent(new Event('resize'));
+  }
+
   ref = player => {
     this.player = player
   }
